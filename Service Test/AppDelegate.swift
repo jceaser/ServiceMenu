@@ -9,19 +9,35 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
 
+/**
+ - Author:
+ thomas cherry
+ - Version:
+ 0.1
+ */
+class AppDelegate: NSObject, NSApplicationDelegate
+{
     @IBOutlet weak var window: NSWindow!
 
-
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        //NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "cmr collections"))
+        NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "CmrCollections"))
+        
+        //let sc = ServiceCmr()
+        //NSRegisterServicesProvider(sc, NSServiceProviderName(rawValue: "cmr collections"))
+        //NSRegisterServicesProvider(sc, NSServiceProviderName(rawValue: "CmrCollections"))
+        //NSApplication.shared.servicesProvider = ServiceCmr()
+        
+        NSApplication.shared.servicesProvider = CmrCollections.init()
+        NSUpdateDynamicServices()
+        
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
+    func applicationWillTerminate(_ aNotification: Notification)
+    {
         // Insert code here to tear down your application
     }
-
 
 }
 

@@ -28,5 +28,43 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSServices</key>
+	<array>
+		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string>E</string>
+			</dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>CMR Collection Service/convert</string>
+			</dict>
+			
+            <key>NSMessage</key>
+			<string>convertCollectionId</string>
+			
+            <key>NSPortName</key>
+			<string>CmrCollections</string>
+			
+            <key>NSRestricted</key>
+			<false/>
+            
+            <key>NSRequiredContext</key>
+            <dict/>
+
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			
+            <key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+            
+		</dict>
+	</array>
 </dict>
 </plist>
