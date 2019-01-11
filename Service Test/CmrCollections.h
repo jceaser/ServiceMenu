@@ -16,8 +16,16 @@
 
 @interface CmrCollections : NSObject
 
-- (NSString*) rotateLettersInString:(NSString*) pboardString;
-- (void)convertCollectionId:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)prefix1:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)prefix2:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+
+- (void)rpn:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)markdown:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+
+- (void)cpush:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)cput:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+
+- (void)nop:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 @end
 

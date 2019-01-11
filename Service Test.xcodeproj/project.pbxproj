@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		669A765921E8BCFB00DA8668 /* StackCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669A765821E8BCFB00DA8668 /* StackCalculator.swift */; };
 		66ADD48E21DD56B30000B58A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66ADD48D21DD56B30000B58A /* AppDelegate.swift */; };
 		66ADD49021DD56B40000B58A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66ADD48F21DD56B40000B58A /* Assets.xcassets */; };
 		66ADD49321DD56B40000B58A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66ADD49121DD56B40000B58A /* MainMenu.xib */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		669A765821E8BCFB00DA8668 /* StackCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCalculator.swift; sourceTree = "<group>"; };
 		66ADD48A21DD56B30000B58A /* Service Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Service Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66ADD48D21DD56B30000B58A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		66ADD48F21DD56B40000B58A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			children = (
 				66ADD48D21DD56B30000B58A /* AppDelegate.swift */,
 				66ADD49B21DFDA520000B58A /* ServiceCmr.swift */,
+				669A765821E8BCFB00DA8668 /* StackCalculator.swift */,
 				66ADD48F21DD56B40000B58A /* Assets.xcassets */,
 				66ADD49121DD56B40000B58A /* MainMenu.xib */,
 				66ADD49421DD56B40000B58A /* Info.plist */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				669A765921E8BCFB00DA8668 /* StackCalculator.swift in Sources */,
 				66ADD49C21DFDA520000B58A /* ServiceCmr.swift in Sources */,
 				66ADD48E21DD56B30000B58A /* AppDelegate.swift in Sources */,
 				66C49BCD21E3BE5900E40DEC /* CmrCollections.m in Sources */,

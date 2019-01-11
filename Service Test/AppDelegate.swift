@@ -19,7 +19,8 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate
 {
     @IBOutlet weak var window: NSWindow!
-
+    //launch with:
+    // /Applications/TextEdit.app/Contents/MacOS/TextEdit -NSDebugServices com.cherry.thomas.Service-Test
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "cmr collections"))
         NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "CmrCollections"))
@@ -31,7 +32,6 @@ class AppDelegate: NSObject, NSApplicationDelegate
         
         NSApplication.shared.servicesProvider = CmrCollections.init()
         NSUpdateDynamicServices()
-        
     }
 
     func applicationWillTerminate(_ aNotification: Notification)
