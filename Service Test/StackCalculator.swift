@@ -22,19 +22,20 @@ class StackCalculator: NSObject
     /* ****************************************************************** */
     // MARK: - Globals
     
-    //var stack = [CalculatorWord]()
+    /**
+    Math stack, this contains the entire stack for all RPN calculations
+    */
     var stack = [Float64]()
     
     /* ****************************************************************** */
     // MARK: - Methods
     
     /**
-     execute the requested macro
+     calculate an RPN formula
      * Parameters:
-        * action: enum of the action to perform
-        * source: text to be operated on
+        * formula: a RPN formula such as "2 3 * P"
      * Returns:
-    the operated on text
+     the answer to the formula
      * Version:
         0.1
      */
@@ -59,9 +60,11 @@ class StackCalculator: NSObject
                     switch cmd
                     {
                         case "p", "++", "--":
-                            ans = unary(operation: cmd!)
+                            ans = self.unary(operation: cmd!)
                         case "+", "-", "*", "/", "%":
-                            binary(operation: cmd!)
+                            self.binary(operation: cmd!)
+                        case "?>":
+                            self.ternary(operation: cmd!)
                         default:
                             ans = ""
                     }
@@ -74,6 +77,14 @@ class StackCalculator: NSObject
     
     // MARK: - Operation Types
     
+    /**
+    Processes all the operations that are unary in nature ; operations on the
+    top most item on the stack
+    
+    * Parameter operation: name/symble of the operation to perform
+    * Returns:
+    in most cases, an empty string as there is nothing to print out
+    */
     func unary(operation:String) -> String
     {
         var ans = ""
@@ -81,7 +92,7 @@ class StackCalculator: NSObject
         {
             case "--": decrement()
             case "++": increment()
-            case "p": ans = printTop()
+            case "p", "=": ans = printTop()
             default:
                 ans = ""
                 print(stack)
@@ -89,6 +100,14 @@ class StackCalculator: NSObject
         return ans
     }
 
+    /**
+    Processes all the operations that are binary in nature ; operations on the
+    top two items on the stack
+    
+    * Parameter operation: name/symble of the operation to perform
+    * Returns:
+    in most cases, an empty string as there is nothing to print out
+    */
     func binary(operation:String)
     {
         switch operation
@@ -98,16 +117,33 @@ class StackCalculator: NSObject
             case "*": times()
             case "/": divide()
             case "%": modulo()
+            case "^": power()
             default: print (stack)
         }
     }
 
+    /**
+    Processes all the operations that are ternary in nature ; operations on the
+    top three item on the stack
+    
+    * Parameter operation: name/symble of the operation to perform
+    * Returns:
+    in most cases, an empty string as there is nothing to print out
+    */
     func ternary(operation:String)
     {
+        switch operation
+        {
+            case "?>": if_positive()
+            default: print (stack)
+        }
     }
 
     // MARK: - Operations
 
+    /**
+    Decrement the top static item by 1.0
+    */
     func decrement()
     {
         if let value = stack.popLast()
@@ -116,6 +152,9 @@ class StackCalculator: NSObject
             stack.append(result)
         }
     }
+    /**
+    incrument the top static item by 1.0
+    */
     func increment()
     {
         if let value = stack.popLast()
@@ -125,6 +164,10 @@ class StackCalculator: NSObject
         }
     }
 
+    /**
+    peek at the top stack item and return it for printing
+    * Return: top item on stack
+    */
     func printTop() -> String
     {
         var ans = ""
@@ -136,6 +179,9 @@ class StackCalculator: NSObject
         return ans
     }
     
+    /**
+    Add the top two stack items
+    */
     func plus()
     {
         if let right = stack.popLast()
@@ -157,6 +203,9 @@ class StackCalculator: NSObject
             //throw an error
         }
     }
+    /**
+    subtract the top two stack items from each other
+    */
     func minus()
     {
         if let right = stack.popLast()
@@ -170,6 +219,9 @@ class StackCalculator: NSObject
         }
     }
 
+    /**
+    Multiply the top two stack items
+    */
     func times()
     {
         if let right = stack.popLast()
@@ -183,6 +235,9 @@ class StackCalculator: NSObject
         }
     }
 
+    /**
+    Divide top two stack items
+    */
     func divide()
     {
         if let right = stack.popLast()
@@ -196,6 +251,9 @@ class StackCalculator: NSObject
         }
     }
 
+    /**
+    Take the modulo (divide but return remainder)
+    */
     func modulo()
     {
         if let right = stack.popLast()
@@ -209,5 +267,42 @@ class StackCalculator: NSObject
         }
     }
 
+    /**
+    take the power of the top two stack items, stack[-1]^stack[0]
+    */
+    func power()
+    {
+        if let right = stack.popLast()
+        {
+            if let left = stack.popLast()
+            {
+                let result = pow(left, right)
+                stack.append(result)
+                print (stack)
+            }
+        }
+    }
 
+    /**
+    take the top three stack items and test if the third item is positive,
+    returning the second item if it is or the first (top) item if it is not
+    
+    stack [0] = stack[-2] ? stack[-1] : stack [0]
+    
+    */
+    func if_positive()
+    {
+        if let alt = stack.popLast()
+        {
+            if let primary = stack.popLast()
+            {
+                if let test = stack.popLast()
+                {
+                    let result = test>0.0 ? primary : alt
+                    stack.append(result)
+                    print (stack)
+                }
+            }
+        }
+    }
 }

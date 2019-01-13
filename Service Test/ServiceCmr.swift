@@ -33,7 +33,7 @@ import AppKit
             let ans = router(action: "prefix", source: s)
             
             pboard?.clearContents()
-            pboard?.writeObjects([ans as NSPasteboardWriting])
+            pboard?.writeObjects([ans as! NSPasteboardWriting])
         }
     }
     
@@ -47,23 +47,65 @@ import AppKit
      * Version:
         0.1
      */
-    func router(action:String, source:String) -> String
+    func router(action:String, source:String) -> Dictionary<String, String>
     {
-        var ans = ""
+        var ret = ["text/plain": "", "text/html": ""]
         switch action
         {
             case "rpn":
-                ans = calculate(formula: source)
-            case "prefix":
-                ans = prefix(src: source);
+                ret = calculate(formula: source)
+            case "prefix1":
+                ret = prefix1(src: source);
+            case "prefix2":
+                ret = prefix2(src: source);
             case "lower":
-                ans = source.lowercased()
+                ret = self.lowercase(src: source)
             case "upper":
-                ans = self.uppercase(src: source)
+                ret = self.uppercase(src: source)
+            case "markdown":
+                ret = self.markdown(text: source)
             default:
-                ans = "No action"
+                print("unknown action")
         }
-        return ans
+        return ret
+    }
+    
+    func markdown_shell(text:String) -> String
+    {
+        let defaults = UserDefaults.standard;
+        let cmd = defaults.string(forKey: "markdown.cmd") ?? "/usr/local/bin/markdown"
+        let out = shell(launchPath: cmd, arguments: [], raw: text)
+        return out
+    }
+
+    func shell(launchPath: String, arguments: [String], raw:String) -> String
+    {
+        print ("warning: running \(launchPath)")
+        let task = Process()
+        task.launchPath = launchPath
+        task.arguments = arguments
+
+        let pipe_in = Pipe()
+        task.standardInput = pipe_in
+        
+        let pipe_out = Pipe()
+        task.standardOutput = pipe_out
+        
+        task.launch()
+
+        //send document
+        let data_in = raw.data(using: .utf8)
+        pipe_in.fileHandleForWriting.write(data_in!)
+        pipe_in.fileHandleForWriting.closeFile()
+
+        task.waitUntilExit()
+        
+        //read document
+        let data = pipe_out.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)!
+
+        task.terminate()
+        return output
     }
     
     /* ********************************************************************** */
@@ -76,58 +118,72 @@ import AppKit
      * Returns:
         all text is uppercases
      */
-    func uppercase(src:String) -> String
+    func uppercase(src:String) -> Dictionary<String,String>
     {
-        return src.uppercased();
+        return ["text/plain":src.uppercased(), "text/html":""]
     }
     
-    func markdown(text:String) -> String
+    func lowercase(src:String) -> Dictionary<String,String>
+    {
+        return ["text/plain":src.lowercased(), "text/html":""]
+    }
+    
+    func markdown(text:String) -> Dictionary<String,String>
     {
         //call the markdown command, get it converted
-        
-        return ""
+        //let markdown = "<h1>Markdown</h1>\n<b>bold</b> <i>italic</i> <u>underline</u>"
+        let markdown = markdown_shell(text: text)
+        return ["text/plain":text, "text/html":markdown]
     }
     
-    func calculate(formula:String) -> String
+    func calculate(formula:String) -> Dictionary<String,String>
     {
         let calculator = StackCalculator()
-        return calculator.calculate(formula)
+        let result:String = calculator.calculate(formula)
+        let output = String("\(formula) = \(result)")
+        return ["text/plain":output, "text/html":""]
     }
     
     //curl "https://cmr.sit.earthdata.nasa.gov/search/concepts/C1200210916-SCIOPSTEST"
-    func prefix(src:String) -> String
+    func prefix1(src:String) -> Dictionary<String,String>
     {
-        let defaults = UserDefaults.standard;
-        let pattern = defaults.string(forKey: "url.pattern.1") ??
-            "[a-z]?[0-9]*-[a-zA-Z_]+"
-        let host = defaults.string(forKey: "url.prefix.1") ??
-            "https://cmr.earthdata.nasa.gov/search/concepts/"
-        let range = NSRange(location:0, length:src.utf16.count)
-        let regex = try! NSRegularExpression(pattern: pattern)
-        var ret = src
-        if regex.firstMatch(in: src, options: [], range: range) != nil
-        {
-            ret = host + src
-        }
-        return ret
+        return generic_prefix(src: src
+            , pattern: "url.pattern.1"
+            , patternDefault: "[a-z]?[0-9]*-[a-zA-Z_]+"
+            , prefix: "url.prefix.1"
+            , prefixDefault: "https://cmr.earthdata.nasa.gov/search/concepts/"
+        )
     }
 
     //curl "https://bugs.earthdata.nasa.gov/browse/GCMD-1234"
-    func prefix2(src:String) -> String
+    func prefix2(src:String) -> Dictionary<String,String>
+    {
+        return generic_prefix(src: src
+            , pattern: "url.pattern.2"
+            , patternDefault: "[A-Z]+-[0-9]+"
+            , prefix:"url.prefix.2"
+            , prefixDefault: "https://bugs.earthdata.nasa.gov/browse/"
+        )
+    }
+    
+    func generic_prefix(src:String
+            , pattern:String, patternDefault:String
+            , prefix:String, prefixDefault:String
+    ) -> Dictionary<String,String>
     {
         let defaults = UserDefaults.standard;
-        let pattern = defaults.string(forKey: "url.pattern.2") ??
-            "[A-Z]+-[0-9]+"
-        let host = defaults.string(forKey: "url.prefix.2") ??
-            "https://bugs.earthdata.nasa.gov/browse/"
+        let pattern = defaults.string(forKey: pattern) ?? patternDefault
+        let host = defaults.string(forKey: prefix) ?? patternDefault
         let range = NSRange(location:0, length:src.utf16.count)
         let regex = try! NSRegularExpression(pattern: pattern)
-        var ret = src
+        var text_link = src
         if regex.firstMatch(in: src, options: [], range: range) != nil
         {
-            ret = host + src
+            text_link = host + src
         }
-        return ret
+        let html_link = String(format: "<a href=\"%s\">%s</a>", text_link)
+        
+        return ["text/plain":text_link, "text/html":html_link]
     }
 
 }

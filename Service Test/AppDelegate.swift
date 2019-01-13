@@ -19,8 +19,10 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate
 {
     @IBOutlet weak var window: NSWindow!
+    
     //launch with:
     // /Applications/TextEdit.app/Contents/MacOS/TextEdit -NSDebugServices com.cherry.thomas.Service-Test
+    //reset with: /System/Library/CoreServices/pbs -update
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "cmr collections"))
         NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "CmrCollections"))
