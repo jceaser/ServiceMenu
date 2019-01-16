@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 /**
- handle requests from the service menu
+ handle requests from the service menu using the swift language
  - Author:
  thomas cherry
  - Version:
@@ -21,6 +21,18 @@ import AppKit
     /* ********************************************************************** */
     // MARK: - service handlers
     
+    var calculator:StackCalculator?
+    
+    /**
+    Could never get this function to work, don't know why the OS will not
+    recognize the function signature, leaving it here till it is figured out
+    what is wrong.
+    
+    * Parameters:
+        * pboard: the pasteboard to read and write to
+        * userData: associated user data that goes with the pasteboard
+        * error: nil if no errors, message otherwise
+    */
     func convertCollectionId(
         _ pboard: NSPasteboard?
         , userData:String
@@ -138,8 +150,11 @@ import AppKit
     
     func calculate(formula:String) -> Dictionary<String,String>
     {
-        let calculator = StackCalculator()
-        let result:String = calculator.calculate(formula)
+        if self.calculator==nil
+        {
+            self.calculator = StackCalculator()
+        }
+        let result:String = (calculator?.calculate(formula))!
         let output = String("\(formula) = \(result)")
         return ["text/plain":output, "text/html":""]
     }
@@ -174,7 +189,7 @@ import AppKit
         let defaults = UserDefaults.standard;
         let pattern = defaults.string(forKey: pattern) ?? patternDefault
         let host = defaults.string(forKey: prefix) ?? patternDefault
-        let range = NSRange(location:0, length:src.utf16.count)
+        let range = NSRange(location:0, length:src.utf8.count)
         let regex = try! NSRegularExpression(pattern: pattern)
         var text_link = src
         if regex.firstMatch(in: src, options: [], range: range) != nil

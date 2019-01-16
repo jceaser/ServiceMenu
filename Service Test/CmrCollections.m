@@ -81,13 +81,43 @@
 {
     if (pboard==nil || userData==nil){return;}
     
-    NSArray* classArray = [NSArray arrayWithObject:[NSString class]];
+    //NSArray* classArray = [NSArray arrayWithObject:[NSString class]];
+    NSArray* classArray = @[[NSString class]];
+    //NSArray* classArray = @[[NSPasteboardItem class]];
     NSDictionary* options = [NSDictionary dictionary];
+
+    NSLog(@"userData=%@ length %lu\n", userData, (unsigned long)userData.length);
 
     if ([pboard canReadObjectForClasses:classArray options:options])
     {
-        NSArray* objectsToRead = [pboard readObjectsForClasses:classArray options:options];
-        NSString* text = [objectsToRead objectAtIndex:0];
+        //NSArray* objectsToRead = [pboard readObjectsForClasses:classArray options:options];
+        NSString* text = [pboard stringForType:NSPasteboardTypeString];
+        if (text!=nil)
+        {
+            text = [text stringByTrimmingCharactersInSet:
+                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            text = [text stringByTrimmingCharactersInSet:
+                [NSCharacterSet controlCharacterSet]];
+            if (text.length<1){return;}
+NSLog(@"text=%@ length %lu\n", text, (unsigned long)text.length);
+        }
+        /*NSString* text = @"";
+        for (id object in objectsToRead)
+        {
+        
+NSLog(@"\nobject: %@=%@\n%@\n", [object className], object, [object types]);
+            
+            if ([[object types] containsObject: NSPasteboardTypeString])
+            {//@"public.utf8-plain-text"
+                NSPasteboardItem* item = object;
+                text = [item stringForType:NSPasteboardTypeString];
+NSLog(@"text from item is '%@'\n", text);
+                break;
+            }
+
+        }*/
+        
+        //NSString* text = [objectsToRead objectAtIndex:0];
         NSDictionary* ret = [self action_switch:task value:text error:error];
         if (*error==nil)
         {
@@ -95,13 +125,13 @@
             NSString* text = [ret objectForKey:@"text/plain"];
             if (text != nil && text.length>0)
             {
-                NSLog(@"sending text '%@' to pasteboard", text);
+NSLog(@"sending text '%@' to pasteboard", text);
                 [pboard setString:text forType:NSStringPboardType];
             }
             NSString* html = [ret objectForKey:@"text/html"];
             if (html != nil && html.length>0)
             {
-                NSLog(@"sending html '%@' to pasteboard", html);
+NSLog(@"sending html '%@' to pasteboard", html);
                 [pboard setString:html forType:NSPasteboardTypeHTML];
             }
         }
