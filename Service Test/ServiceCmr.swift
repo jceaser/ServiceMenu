@@ -22,6 +22,7 @@ import AppKit
     // MARK: - service handlers
     
     var calculator:StackCalculator?
+    var clipboardStack = Array<String>()
     
     /**
     Could never get this function to work, don't know why the OS will not
@@ -64,12 +65,16 @@ import AppKit
         var ret = ["text/plain": "", "text/html": ""]
         switch action
         {
+            case "cpush":
+                clipboardStackPush(src: source)
+            case "cpop":
+                ret = self.clipboardStackPop(src: source)
             case "rpn":
-                ret = calculate(formula: source)
+                ret = self.calculate(formula: source)
             case "prefix1":
-                ret = prefix1(src: source);
+                ret = self.prefix1(src: source);
             case "prefix2":
-                ret = prefix2(src: source);
+                ret = self.prefix2(src: source);
             case "lower":
                 ret = self.lowercase(src: source)
             case "upper":
@@ -123,6 +128,22 @@ import AppKit
     /* ********************************************************************** */
     // MARK: - actions
     
+    func clipboardStackPush(src:String) // -> Dictionary<String,String>
+    {
+        self.clipboardStack.append(src);
+        //return ["text/plain":"", "text/html":""]
+    }
+    
+    func clipboardStackPop(src:String) -> Dictionary<String,String>
+    {
+        var ret = ""
+        if let item = self.clipboardStack.popLast()
+        {
+            ret = item
+        }
+        return ["text/plain":ret, "text/html":""]
+    }
+
     /**
      change the selected text to upper case
      * Parameters:

@@ -44,13 +44,22 @@
 
 - (void)cpush:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
-    printf ("no operation yes\n");
+    [self handle:@"cpush" from:pboard userData:userData error:error];
 }
 
 - (void)cput:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
-    printf ("no operation yes\n");
-    //[self handle:@"cput" from:pboard userData:userData error:error];
+    [self handle:@"cput" from:pboard userData:userData error:error];
+}
+
+- (void)lowercase:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
+{
+    [self handle:@"lowercase" from:pboard userData:userData error:error];
+}
+
+- (void)uppercase:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
+{
+    [self handle:@"uppercase" from:pboard userData:userData error:error];
 }
 
 /* ****************************************************************** */
@@ -155,7 +164,10 @@ NSLog(@"sending html '%@' to pasteboard", html);
 {
     NSDictionary* dict = nil;
     ServiceCmr* service = [ServiceCmr new];
-    NSArray* accaptable = @[@"rpn", @"prefix1", @"prefix2", @"markdown"];
+    NSArray* accaptable = @[@"rpn", @"markdown"
+        , @"prefix1", @"prefix2"
+        , @"uppercase", @"lowercase"
+        , @"cput", @"cpush"];
     
     if ([accaptable doesContain:action])
     {
