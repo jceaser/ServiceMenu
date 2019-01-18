@@ -34,17 +34,17 @@
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
-				<string>1</string>
+				<string>u</string>
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>~ Prefix One</string>
+				<string>Odd Tools Upper Case</string>
 			</dict>
 			<key>NSMessage</key>
-			<string>prefix1</string>
+			<string>uppercase</string>
 			<key>NSPortName</key>
-			<string>CmrCollections</string>
+			<string>ServiceHandler</string>
 			<key>NSRestricted</key>
 			<false/>
 			<key>NSRequiredContext</key>
@@ -62,17 +62,17 @@
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
-				<string>2</string>
+				<string>l</string>
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>~ Prefix Two</string>
+				<string>Odd Tools Lower Case</string>
 			</dict>
 			<key>NSMessage</key>
-			<string>prefix2</string>
+			<string>lowercase</string>
 			<key>NSPortName</key>
-			<string>CmrCollections</string>
+			<string>ServiceHandler</string>
 			<key>NSRestricted</key>
 			<false/>
 			<key>NSRequiredContext</key>
@@ -90,17 +90,17 @@
 			<key>NSKeyEquivalent</key>
 			<dict>
 				<key>default</key>
-				<string>p</string>
+				<string>e</string>
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>~ PUT</string>
+				<string>Odd Tools Execute</string>
 			</dict>
 			<key>NSMessage</key>
-			<string>cput</string>
+			<string>execute</string>
 			<key>NSPortName</key>
-			<string>CmrCollections</string>
+			<string>ServiceHandler</string>
 			<key>NSRestricted</key>
 			<false/>
 			<key>NSRequiredContext</key>
@@ -123,12 +123,40 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>~ POP</string>
+				<string>Odd Tools POP</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>cpop</string>
 			<key>NSPortName</key>
-			<string>CmrCollections</string>
+			<string>ServiceHandler</string>
+			<key>NSRestricted</key>
+			<false/>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string>P</string>
+			</dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Odd Tools Push</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>cpush</string>
+			<key>NSPortName</key>
+			<string>ServiceHandler</string>
 			<key>NSRestricted</key>
 			<false/>
 			<key>NSRequiredContext</key>
@@ -151,12 +179,12 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>~ RPN</string>
+				<string>Odd Tools RPN Calculator</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>rpn</string>
 			<key>NSPortName</key>
-			<string>CmrCollections</string>
+			<string>ServiceHandler</string>
 			<key>NSRestricted</key>
 			<false/>
 			<key>NSRequiredContext</key>
@@ -179,40 +207,12 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>~ Markdown</string>
+				<string>Odd Tools Markdown</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>markdown</string>
 			<key>NSPortName</key>
-			<string>CmrCollections</string>
-			<key>NSRestricted</key>
-			<false/>
-			<key>NSRequiredContext</key>
-			<dict/>
-			<key>NSSendTypes</key>
-			<array>
-				<string>NSStringPboardType</string>
-			</array>
-			<key>NSReturnTypes</key>
-			<array>
-				<string>NSStringPboardType</string>
-			</array>
-		</dict>
-		<dict>
-			<key>NSKeyEquivalent</key>
-			<dict>
-				<key>default</key>
-				<string>m2</string>
-			</dict>
-			<key>NSMenuItem</key>
-			<dict>
-				<key>default</key>
-				<string>~ Markdown2</string>
-			</dict>
-			<key>NSMessage</key>
-			<string>markdown</string>
-			<key>NSPortName</key>
-			<string>CmrCollections</string>
+			<string>ServiceHandler</string>
 			<key>NSRestricted</key>
 			<false/>
 			<key>NSRequiredContext</key>
@@ -224,6 +224,34 @@
 			<key>NSReturnTypes</key>
 			<array>
 				<string>NSPasteboardTypeHTML</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSKeyEquivalent</key>
+			<dict>
+				<key>default</key>
+				<string>r</string>
+			</dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Odd Tools Replace</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>replacement</string>
+			<key>NSPortName</key>
+			<string>ServiceHandler</string>
+			<key>NSRestricted</key>
+			<false/>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSSendTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
+			</array>
+			<key>NSReturnTypes</key>
+			<array>
+				<string>NSStringPboardType</string>
 			</array>
 		</dict>
 	</array>

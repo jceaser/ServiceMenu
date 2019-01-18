@@ -59,15 +59,16 @@ class StackCalculator: NSObject
                 {
                     switch cmd
                     {
-                        case "p", "++", "--":
+                        case "=", "p", "++", "--", "avg":
                             ans = self.unary(operation: cmd!)
-                        case "+", "-", "*", "/", "%":
+                        case "+", "-", "*", "/", "%", "^":
                             self.binary(operation: cmd!)
                         case "?>":
                             self.ternary(operation: cmd!)
                         default:
                             ans = ""
                     }
+                    print (stack)
                     continue
                 }
             }
@@ -92,6 +93,7 @@ class StackCalculator: NSObject
         {
             case "--": decrement()
             case "++": increment()
+            case "avg": average()
             case "p", "=": ans = printTop()
             default:
                 ans = ""
@@ -140,7 +142,22 @@ class StackCalculator: NSObject
     }
 
     // MARK: - Operations
-
+    
+    func average()
+    {
+        let max = stack.count
+        var running = 0.0
+        for _ in 1...max
+        {
+            if let popped = stack.popLast()
+            {
+                running = running + popped
+            }
+        }
+        let ans = running / Float64(max)
+        stack.append(ans)
+    }
+    
     /**
     Decrement the top static item by 1.0
     */
@@ -190,7 +207,6 @@ class StackCalculator: NSObject
             {
                 let result = left + right
                 stack.append(result)
-                print (stack)
                 return
             }
             else
@@ -214,7 +230,6 @@ class StackCalculator: NSObject
             {
                 let result = left - right
                 stack.append(result)
-                print (stack)
             }
         }
     }
@@ -228,9 +243,8 @@ class StackCalculator: NSObject
         {
             if let left = stack.popLast()
             {
-                    let result = left * right
+                let result = left * right
                 stack.append(result)
-                print (stack)
             }
         }
     }
@@ -246,7 +260,6 @@ class StackCalculator: NSObject
             {
                 let result = left / right
                 stack.append(result)
-                print (stack)
             }
         }
     }
@@ -262,7 +275,6 @@ class StackCalculator: NSObject
             {
                 let result = left.truncatingRemainder(dividingBy: right)
                 stack.append(result)
-                print (stack)
             }
         }
     }
@@ -278,7 +290,6 @@ class StackCalculator: NSObject
             {
                 let result = pow(left, right)
                 stack.append(result)
-                print (stack)
             }
         }
     }
@@ -300,7 +311,6 @@ class StackCalculator: NSObject
                 {
                     let result = test>0.0 ? primary : alt
                     stack.append(result)
-                    print (stack)
                 }
             }
         }

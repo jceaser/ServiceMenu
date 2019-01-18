@@ -1,5 +1,5 @@
 //
-//  CmrCollections.m
+//  ServiceHandler.m
 //  Service Test
 //
 //  Created by Thomas Cherry on 2019-01-07.
@@ -9,22 +9,22 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
-#import "CmrCollections.h"
+#import "ServiceHandler.h"
 #import "Service_Test-Swift.h"
 
-@implementation CmrCollections
+@implementation ServiceHandler
 
 /* ************************************************************************** */
 // MARK: - public service methods
 
-- (void)prefix1:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
+- (void)replacement:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
-    [self handle:@"prefix1" from:pboard userData:userData error:error];
-
+    [self handle:@"replacement" from:pboard userData:userData error:error];
 }
-- (void)prefix2:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
+
+- (void)execute:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
-    [self handle:@"prefix2" from:pboard userData:userData error:error];
+    [self handle:@"execute" from:pboard userData:userData error:error];
 }
 
 - (void)nop:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
@@ -45,11 +45,15 @@
 - (void)cpush:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
     [self handle:@"cpush" from:pboard userData:userData error:error];
+    //[self handle:@"replacement" from:pboard userData:userData error:error];
 }
 
 - (void)cput:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
-    [self handle:@"cput" from:pboard userData:userData error:error];
+    //[self handle:@"cput" from:pboard userData:userData error:error];
+    NSLog(@"about to execute\n");
+    //[self handle:@"execute" from:pboard userData:userData error:error];
+    [self handle:@"replacement" from:pboard userData:userData error:error];
 }
 
 - (void)lowercase:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
@@ -91,11 +95,11 @@
     if (pboard==nil || userData==nil){return;}
     
     //NSArray* classArray = [NSArray arrayWithObject:[NSString class]];
-    NSArray* classArray = @[[NSString class]];
     //NSArray* classArray = @[[NSPasteboardItem class]];
+    NSArray* classArray = @[[NSString class]];
     NSDictionary* options = [NSDictionary dictionary];
 
-    NSLog(@"userData=%@ length %lu\n", userData, (unsigned long)userData.length);
+NSLog(@"userData=%@ length %lu\n", userData, (unsigned long)userData.length);
 
     if ([pboard canReadObjectForClasses:classArray options:options])
     {
@@ -107,26 +111,9 @@
                 [NSCharacterSet whitespaceAndNewlineCharacterSet]];
             text = [text stringByTrimmingCharactersInSet:
                 [NSCharacterSet controlCharacterSet]];
-            if (text.length<1){return;}
+            if (text.length<1){;return;}
 NSLog(@"text=%@ length %lu\n", text, (unsigned long)text.length);
         }
-        /*NSString* text = @"";
-        for (id object in objectsToRead)
-        {
-        
-NSLog(@"\nobject: %@=%@\n%@\n", [object className], object, [object types]);
-            
-            if ([[object types] containsObject: NSPasteboardTypeString])
-            {//@"public.utf8-plain-text"
-                NSPasteboardItem* item = object;
-                text = [item stringForType:NSPasteboardTypeString];
-NSLog(@"text from item is '%@'\n", text);
-                break;
-            }
-
-        }*/
-        
-        //NSString* text = [objectsToRead objectAtIndex:0];
         NSDictionary* ret = [self action_switch:task value:text error:error];
         if (*error==nil)
         {
@@ -163,12 +150,11 @@ NSLog(@"sending html '%@' to pasteboard", html);
         value:(NSString*)value error:(NSString**)error
 {
     NSDictionary* dict = nil;
-    ServiceCmr* service = [ServiceCmr new];
-    NSArray* accaptable = @[@"rpn", @"markdown"
-        , @"prefix1", @"prefix2"
+    ActionHandler* service = [ActionHandler new];
+    NSArray* accaptable = @[@"rpn", @"markdown", @"execute", @"replacement"
         , @"uppercase", @"lowercase"
         , @"cput", @"cpush"];
-    
+
     if ([accaptable doesContain:action])
     {
         dict = [service routerWithAction:action source:value];

@@ -1,5 +1,5 @@
 //
-//  CmrCollections.h
+//  ServiceHandler.h
 //  Service Test
 //
 //  Created by Thomas Cherry on 2019-01-07.
@@ -7,20 +7,22 @@
 //
 #import <Foundation/Foundation.h>
 
-#ifndef CmrCollections_h
-#define CmrCollections_h
+#ifndef ServiceHandler_h
+#define ServiceHandler_h
 
 #import <AppKit/AppKit.h>
 
-@class ServiceCmr;
+@class ActionHandler;
 
-@interface CmrCollections : NSObject
+@interface ServiceHandler : NSObject
 
-- (void)prefix1:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
-- (void)prefix2:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)lowercase:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)uppercase:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
+- (void)replacement:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 - (void)rpn:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 - (void)markdown:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)execute:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 
 - (void)cpush:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 - (void)cput:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
@@ -29,4 +31,4 @@
 
 @end
 
-#endif /* CmrCollections_h */
+#endif /* ServiceHandler_h */
