@@ -25,7 +25,7 @@
 - (void)execute:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 
 - (void)cpush:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
-- (void)cput:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)cpop:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 - (void)nop:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 

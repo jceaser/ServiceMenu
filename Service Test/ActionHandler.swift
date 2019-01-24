@@ -188,12 +188,14 @@ import AppKit
     {
         //[ {r: regular Expression, f:format } ]
         let default_obj = "{\"r\":\"%@\", \"f\":\"%@\"}"
-        let default_one = String(format:default_obj, "([a-zA-Z]?[0-9]*-[a-zA-Z_-]+)", "https://cmr.earthdata.nasa.gov/search/concepts/%@?pretty=true")
-        let default_two = String(format:default_obj, "([A-Z]+-[0-9]+)", "https://bugs.earthdata.nasa.gov/browse/%@")
-        let default_data = String(format:"[%@, %@]", default_one, default_two)
+        let default_set = String(format:default_obj,
+            "([A-Z]+-[0-9]+)",
+            "https://bugs.somebug.server.com/browse/%@")
+        let default_data = String(format:"[%@]", default_set)
         print ("\n****\n\(default_data)\n****\n")
         
         let defaults = UserDefaults.standard;
+        //let some = defaults.string(forKey: "convert.data")
         let raw_data = defaults.string(forKey: "convert.data") ?? default_data
         
         var out = src

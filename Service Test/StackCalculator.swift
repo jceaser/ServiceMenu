@@ -59,11 +59,12 @@ class StackCalculator: NSObject
                 {
                     switch cmd
                     {
-                        case "=", "p", "++", "--", "avg":
+                        case "help": ans = help()
+                        case "=", "p", "++", "--":
                             ans = self.unary(operation: cmd!)
                         case "+", "-", "*", "/", "%", "^":
                             self.binary(operation: cmd!)
-                        case "?>":
+                        case "?>", "avg":
                             self.ternary(operation: cmd!)
                         default:
                             ans = ""
@@ -93,7 +94,6 @@ class StackCalculator: NSObject
         {
             case "--": decrement()
             case "++": increment()
-            case "avg": average()
             case "p", "=": ans = printTop()
             default:
                 ans = ""
@@ -137,8 +137,30 @@ class StackCalculator: NSObject
         switch operation
         {
             case "?>": if_positive()
+            case "avg": average()
             default: print (stack)
         }
+    }
+
+    func help() -> String
+    {
+        var out = ""
+        let format = "%-5@ : %-10@ [%@]->[%@] - %@\n"
+        out = out + String(format: format, "opt", "Operation", "In", "Out", "Description")
+        out = out + String(format: format, "-----", "----------", "--", "---", "-----------")
+        out = out + String(format: format, "avg", "average", "all", "1", "Takes the average of the entire stack")
+        out = out + String(format: format, "++", "increment", "1", "1" , "adds one to top of stack")
+        out = out + String(format: format, "--", "decrement", "1", "1" , "Subtracts one from top of stack")
+        out = out + String(format: format, "p", "print", "1", "-", "Prints top of stack")
+        out = out + String(format: format, "+", "add", "2", "1", "adds top two stack items and returns to top of stack")
+        out = out + String(format: format, "-", "subtract", "2", "1", "subtracts top two stack items")
+        out = out + String(format: format, "*", "multiply", "2", "1", "mulitpiles top two stack items")
+        out = out + String(format: format, "/", "divide", "2", "1", "mulitpiles top two stack items")
+        out = out + String(format: format, "%", "modis", "2", "1", "divides top two and returns remander")
+        out = out + String(format: format, "^", "power", "2", "1", "takes power of top two stack items")
+        out = out + String(format: format, "if>", "if positive", "3", "1", "if [0]>0 then return [1], else [2]")
+
+        return out
     }
 
     // MARK: - Operations

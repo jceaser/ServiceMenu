@@ -45,15 +45,11 @@
 - (void)cpush:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
     [self handle:@"cpush" from:pboard userData:userData error:error];
-    //[self handle:@"replacement" from:pboard userData:userData error:error];
 }
 
-- (void)cput:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
+- (void)cpop:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
 {
-    //[self handle:@"cput" from:pboard userData:userData error:error];
-    NSLog(@"about to execute\n");
-    //[self handle:@"execute" from:pboard userData:userData error:error];
-    [self handle:@"replacement" from:pboard userData:userData error:error];
+    [self handle:@"cpop" from:pboard userData:userData error:error];
 }
 
 - (void)lowercase:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error
@@ -153,7 +149,7 @@ NSLog(@"sending html '%@' to pasteboard", html);
     ActionHandler* service = [ActionHandler new];
     NSArray* accaptable = @[@"rpn", @"markdown", @"execute", @"replacement"
         , @"uppercase", @"lowercase"
-        , @"cput", @"cpush"];
+        , @"cpop", @"cpush"];
 
     if ([accaptable doesContain:action])
     {

@@ -23,7 +23,6 @@ class AppDelegate: NSObject, NSApplicationDelegate
     //launch with: /Applications/TextEdit.app/Contents/MacOS/TextEdit -NSDebugServices com.cherry.thomas.Service-Test
     // reset with: /System/Library/CoreServices/pbs -update
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "CmrCollections"))
         NSUnregisterServicesProvider(NSServiceProviderName(rawValue: "ServiceHandler"))
         
         NSApplication.shared.servicesProvider = ServiceHandler.init()

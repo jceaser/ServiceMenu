@@ -39,7 +39,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools Upper Case</string>
+				<string>Odd Tools: Case, Upper</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>uppercase</string>
@@ -67,7 +67,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools Lower Case</string>
+				<string>Odd Tools: Case, Lower</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>lowercase</string>
@@ -95,7 +95,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools Execute</string>
+				<string>Odd Tools: Execute</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>execute</string>
@@ -123,7 +123,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools POP</string>
+				<string>Odd Tools: Clipboard, POP</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>cpop</string>
@@ -151,7 +151,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools Push</string>
+				<string>Odd Tools: Clipboard, Push</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>cpush</string>
@@ -179,7 +179,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools RPN Calculator</string>
+				<string>Odd Tools: RPN Calculator</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>rpn</string>
@@ -207,7 +207,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools Markdown</string>
+				<string>Odd Tools: Markdown</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>markdown</string>
@@ -223,6 +223,7 @@
 			</array>
 			<key>NSReturnTypes</key>
 			<array>
+                <string>NSStringPboardType</string>
 				<string>NSPasteboardTypeHTML</string>
 			</array>
 		</dict>
@@ -235,7 +236,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Odd Tools Replace</string>
+				<string>Odd Tools: Replace</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>replacement</string>
