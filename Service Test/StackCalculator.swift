@@ -54,30 +54,63 @@ class StackCalculator: NSObject
             }
             else
             {
-                let cmd:String? = String(item)
-                if (cmd != nil)
+                var cmd:String = String(item)
+                var multiplier = 1  //assume we will run at least once
+                if (cmd.contains(":"))
+                {
+                    let cmd_parts = cmd.split(separator: ":")
+                    let raw_action = String(cmd_parts[0])
+                    let raw_multiplier = String(cmd_parts[1])
+                    if let times = Int(raw_multiplier)
+                    {
+                        if (0 < times)
+                        {
+                            multiplier = times
+                            cmd = String(raw_action)
+                        }
+                    }
+                }
+                for _ in 1...multiplier
                 {
                     switch cmd
                     {
                         case "help": ans = help()
-                        case "=", "p", "++", "--":
-                            ans = self.unary(operation: cmd!)
-                        case "+", "-", "*", "/", "%", "^":
-                            self.binary(operation: cmd!)
+                        case "=", "p", "P", "d":
+                            ans = ans + " " + self.printers(operation: cmd)
+                            ans = ans.trimmingCharacters(in: .whitespacesAndNewlines)
+                        case "++", "--", "<<", ">>", "^2", "√", "abs", "ceil", "floor", "π", "c":
+                            self.unary(operation: cmd)
+                        case "+", "-", "*", "/", "%", "^", "<>", "<->", "max", "min":
+                            self.binary(operation: cmd)
                         case "?>", "avg":
-                            self.ternary(operation: cmd!)
+                            self.ternary(operation: cmd)
                         default:
-                            ans = ""
+                            print ("unknown command: \(cmd).")
                     }
-                    print (stack)
-                    continue
                 }
+                print (stack)
+                continue
             }
         }
         return ans;
     }
     
     // MARK: - Operation Types
+    
+    func printers(operation:String) -> String
+    {
+        var ans = ""
+        switch operation
+        {
+            case "p", "=": ans = printTop()
+            case "P": ans = printTopFormated()
+            case "d": ans = dumpAll()
+            default:
+                ans = ""
+                print(stack)
+        }
+        return ans
+    }
     
     /**
     Processes all the operations that are unary in nature ; operations on the
@@ -87,21 +120,25 @@ class StackCalculator: NSObject
     * Returns:
     in most cases, an empty string as there is nothing to print out
     */
-    func unary(operation:String) -> String
+    func unary(operation:String)
     {
-        var ans = ""
         switch operation
         {
+            case ">>": rotateRight()
+            case "<<": rotateLeft()
             case "--": decrement()
             case "++": increment()
-            case "p", "=": ans = printTop()
-            default:
-                ans = ""
-                print(stack)
+            case "^2": square()
+            case "√": squareRoot()
+            case "π": pie()
+            case "c": speedOfLight()
+            case "abs": absTop()
+            case "floor": floorTop()
+            case "ceil": ceilTop()
+            default: print(stack)
         }
-        return ans
     }
-
+    
     /**
     Processes all the operations that are binary in nature ; operations on the
     top two items on the stack
@@ -120,6 +157,9 @@ class StackCalculator: NSObject
             case "/": divide()
             case "%": modulo()
             case "^": power()
+            case "<>", "<->" : swap()
+            case "max": max2()
+            case "min": min2()
             default: print (stack)
         }
     }
@@ -165,43 +205,7 @@ class StackCalculator: NSObject
 
     // MARK: - Operations
     
-    func average()
-    {
-        let max = stack.count
-        var running = 0.0
-        for _ in 1...max
-        {
-            if let popped = stack.popLast()
-            {
-                running = running + popped
-            }
-        }
-        let ans = running / Float64(max)
-        stack.append(ans)
-    }
-    
-    /**
-    Decrement the top static item by 1.0
-    */
-    func decrement()
-    {
-        if let value = stack.popLast()
-        {
-            let result = value-1
-            stack.append(result)
-        }
-    }
-    /**
-    incrument the top static item by 1.0
-    */
-    func increment()
-    {
-        if let value = stack.popLast()
-        {
-            let result = value+1
-            stack.append(result)
-        }
-    }
+    // MARK: Printers
 
     /**
     peek at the top stack item and return it for printing
@@ -217,7 +221,38 @@ class StackCalculator: NSObject
         print("printing ans of \(ans)")
         return ans
     }
+
+    /**
+    peek at the top stack item and return it, formated, for printing. Formated
+    by removing unneeded zeros and adding commas for each number group.
+    * Return: top item on stack
+    */
+    func printTopFormated() -> String
+    {
+        var ans = ""
+        if let last = stack.last
+        {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            numberFormatter.groupingSize = 3
+            ans = numberFormatter.string(from: NSNumber(value: last))!
+            //ans = String(format: "%'0.f", last)
+        }
+        print("printing ans of \(ans)")
+        return ans
+    }
     
+    /**
+    Dump the entire stack out for viewing inside of square brackets.
+    * Return: Swift description of an array of Floats
+    */
+    func dumpAll() -> String
+    {
+        return stack.description
+    }
+
+    // MARK: Binarry operators
+
     /**
     Add the top two stack items
     */
@@ -314,6 +349,189 @@ class StackCalculator: NSObject
                 stack.append(result)
             }
         }
+    }
+
+    /**
+    find the larger of the top two stack items
+    */
+    func max2()
+    {
+        if let right = stack.popLast()
+        {
+            if let left = stack.popLast()
+            {
+                let result = max(left, right)
+                stack.append(result)
+            }
+        }
+    }
+    /**
+    find the smaller of the top two stack items
+    */
+    func min2()
+    {
+        if let right = stack.popLast()
+        {
+            if let left = stack.popLast()
+            {
+                let result = min(left, right)
+                stack.append(result)
+            }
+        }
+    }
+    
+    /**
+    swap the top two stack items
+    */
+    func swap()
+    {
+        if let right = stack.popLast()
+        {
+            if let left = stack.popLast()
+            {
+                stack.append(right)
+                stack.append(left)
+            }
+        }
+    }
+
+    // MARK: Unary operators
+
+    /**
+    Decrement the top static item by 1.0
+    */
+    func decrement()
+    {
+        if let value = stack.popLast()
+        {
+            let result = value-1
+            stack.append(result)
+        }
+    }
+    
+    /**
+    incrument the top static item by 1.0
+    */
+    func increment()
+    {
+        if let value = stack.popLast()
+        {
+            let result = value+1
+            stack.append(result)
+        }
+    }
+
+    /**
+    take the square root of the top stack item
+    */
+    func squareRoot()
+    {
+        if let top = stack.popLast()
+        {
+            let result = sqrt(top)
+            stack.append(result)
+        }
+    }
+    
+    /**
+    square the top stack item
+    */
+    func square()
+    {
+        if let top = stack.popLast()
+        {
+            let result = pow(top, 2)
+            stack.append(result)
+        }
+    }
+    
+    /**
+    Put PI (π) on the stack
+    */
+    func pie()
+    {
+        stack.append(Float64.pi)
+    }
+    
+    /**
+    Put the speed of light in meters/second on the stack
+    */
+    func speedOfLight(){stack.append(299792458.0)}
+    
+    /**
+    Find the absolute value of the top stack item
+    */
+    func absTop()
+    {
+        if let top = stack.popLast()
+        {
+            let result = abs(top)
+            stack.append(result)
+        }
+    }
+
+    /**
+    Floor the top stack item
+    */
+    func floorTop()
+    {
+        if let top = stack.popLast()
+        {
+            let result = floor(top)
+            stack.append(result)
+        }
+    }
+
+    /**
+    Ceil the top stack item
+    */
+    func ceilTop()
+    {
+        if let top = stack.popLast()
+        {
+            let result = ceil(top)
+            stack.append(result)
+        }
+    }
+    
+    /**
+    Rotate the entire stack by taking the last stack item and put it in the front
+    Thus, [1, 2, 3] becomes [2, 3, 1]
+    */
+    func rotateLeft()
+    {
+        let first = stack.removeFirst()
+        stack.append(first)
+    }
+
+    /**
+    Rotate the entire stack by taking the top stack item and putting at the end.
+    Thus, [1, 2, 3] becomes [3, 1, 2]
+    */
+    func rotateRight()
+    {
+        if let last = stack.popLast()
+        {
+            stack.insert(last, at: 0)
+        }
+    }
+
+    /**
+    Take the average of the entire stack and return that value as the sole value
+    */
+    func average()
+    {
+        let max = stack.count
+        var running = 0.0
+        for _ in 1...max
+        {
+            if let popped = stack.popLast()
+            {
+                running = running + popped
+            }
+        }
+        let ans = running / Float64(max)
+        stack.append(ans)
     }
 
     /**

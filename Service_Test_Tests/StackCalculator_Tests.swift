@@ -21,8 +21,26 @@ class StackCalculator_Tests: XCTestCase {
     func testUnaryOps()
     {
         helper_test_math(equation: "3 p", expected: "3.000000")
+        helper_test_math(equation: "3 d", expected: "[3.0]")
+
         helper_test_math(equation: "2 ++ p", expected: "3.000000")
         helper_test_math(equation: "4 -- p", expected: "3.000000")
+        
+        helper_test_math(equation: "1 2 3 4 5 << << d", expected: "[3.0, 4.0, 5.0, 1.0, 2.0]")
+        helper_test_math(equation: "1 2 3 4 5 >> >> d", expected: "[4.0, 5.0, 1.0, 2.0, 3.0]")
+        
+        helper_test_math(equation: "5 ^2 p", expected: "25.000000")
+        helper_test_math(equation: "25 √ p", expected: "5.000000")
+        
+        helper_test_math(equation: "-128 abs P", expected: "128")
+        
+        helper_test_math(equation: "π p", expected: "3.141593")
+        helper_test_math(equation: "c p", expected: "299792458.000000")
+
+        helper_test_math(equation: "-128.9 floor P", expected: "-129")
+        helper_test_math(equation: "128.9 floor P", expected: "128")
+        helper_test_math(equation: "-128.9 ceil P", expected: "-128")
+        helper_test_math(equation: "128.9 ceil P", expected: "129")
     }
 
     func testBinaryOps()
@@ -33,15 +51,39 @@ class StackCalculator_Tests: XCTestCase {
         helper_test_math(equation: "6 2 / p", expected: "3.000000")
         helper_test_math(equation: "5 2 % p", expected: "1.000000")
         helper_test_math(equation: "2 8 ^ p", expected: "256.000000")
+        helper_test_math(equation: "1 2 3 <> d", expected: "[1.0, 3.0, 2.0]")
+        helper_test_math(equation: "1 2 max p", expected: "2.000000")
+        helper_test_math(equation: "1 2 min p", expected: "1.000000")
     }
 
     func testTernaryOps()
     {
         helper_test_math(equation: "1 2 3 ?> p", expected: "2.000000")
+        helper_test_math(equation: "0 2 3 ?> p", expected: "3.000000")
         helper_test_math(equation: "-1 2 3 ?> p", expected: "3.000000")
         helper_test_math(equation: "1 2 3 4 5 6 7 8 9 avg p", expected: "5.000000")
     }
     
+    func testPrintOutput()
+    {
+        helper_test_math(equation: "2 16 ^ =", expected: "65536.000000")
+        helper_test_math(equation: "2 16 ^ p", expected: "65536.000000")
+        helper_test_math(equation: "2 16 ^ P", expected: "65,536")
+        helper_test_math(equation: "2.0 16.0 ^ P", expected: "65,536")
+        helper_test_math(equation: "2 16 ^ 3 / P", expected: "21,845.333")
+        helper_test_math(equation: "1 2 3 4 5 d", expected: "[1.0, 2.0, 3.0, 4.0, 5.0]")
+    }
+    
+    func testMultiply()
+    {
+        helper_test_math(equation: "1 2 3 4 5 6 7 8 9 +:8 p", expected: "45.000000")
+    }
+    
+    func testOtherOperations()
+    {
+        helper_test_math(equation: "3 ^2 4 ^2 + √ p", expected: "5.000000")
+    }
+
     func testHelpOps()
     {
         let stack = StackCalculator()
@@ -55,7 +97,7 @@ class StackCalculator_Tests: XCTestCase {
         let ans = stack.calculate(equation)
         XCTAssertEqual(expected, ans)
     }
-
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
