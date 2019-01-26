@@ -182,6 +182,8 @@ class StackCalculator: NSObject
         }
     }
 
+    // MARK: - Operations
+    
     func help() -> String
     {
         var out = ""
@@ -203,9 +205,7 @@ class StackCalculator: NSObject
         return out
     }
 
-    // MARK: - Operations
-    
-    // MARK: Printers
+    // MARK: -Printers
 
     /**
     peek at the top stack item and return it for printing
@@ -251,7 +251,128 @@ class StackCalculator: NSObject
         return stack.description
     }
 
-    // MARK: Binarry operators
+    // MARK: Unary operators
+
+    /**
+    Decrement the top static item by 1.0
+    */
+    func decrement()
+    {
+        if let value = stack.popLast()
+        {
+            let result = value-1
+            stack.append(result)
+        }
+    }
+    
+    /**
+    incrument the top static item by 1.0
+    */
+    func increment()
+    {
+        if let value = stack.popLast()
+        {
+            let result = value+1
+            stack.append(result)
+        }
+    }
+
+    /**
+    take the square root of the top stack item
+    */
+    func squareRoot()
+    {
+        if let top = stack.popLast()
+        {
+            let result = sqrt(top)
+            stack.append(result)
+        }
+    }
+    
+    /**
+    square the top stack item
+    */
+    func square()
+    {
+        if let top = stack.popLast()
+        {
+            let result = pow(top, 2)
+            stack.append(result)
+        }
+    }
+    
+    /**
+    Put PI (π) on the stack
+    */
+    func pie()
+    {
+        stack.append(Float64.pi)
+    }
+    
+    /**
+    Put the speed of light in meters/second on the stack
+    */
+    func speedOfLight(){stack.append(299792458.0)}
+    
+    /**
+    Find the absolute value of the top stack item
+    */
+    func absTop()
+    {
+        if let top = stack.popLast()
+        {
+            let result = abs(top)
+            stack.append(result)
+        }
+    }
+
+    /**
+    Floor the top stack item
+    */
+    func floorTop()
+    {
+        if let top = stack.popLast()
+        {
+            let result = floor(top)
+            stack.append(result)
+        }
+    }
+
+    /**
+    Ceil the top stack item
+    */
+    func ceilTop()
+    {
+        if let top = stack.popLast()
+        {
+            let result = ceil(top)
+            stack.append(result)
+        }
+    }
+    
+    /**
+    Rotate the entire stack by taking the last stack item and put it in the front
+    Thus, [1, 2, 3] becomes [2, 3, 1]
+    */
+    func rotateLeft()
+    {
+        let first = stack.removeFirst()
+        stack.append(first)
+    }
+
+    /**
+    Rotate the entire stack by taking the top stack item and putting at the end.
+    Thus, [1, 2, 3] becomes [3, 1, 2]
+    */
+    func rotateRight()
+    {
+        if let last = stack.popLast()
+        {
+            stack.insert(last, at: 0)
+        }
+    }
+    
+    // MARK: -Binarry operators
 
     /**
     Add the top two stack items
@@ -395,126 +516,8 @@ class StackCalculator: NSObject
         }
     }
 
-    // MARK: Unary operators
 
-    /**
-    Decrement the top static item by 1.0
-    */
-    func decrement()
-    {
-        if let value = stack.popLast()
-        {
-            let result = value-1
-            stack.append(result)
-        }
-    }
-    
-    /**
-    incrument the top static item by 1.0
-    */
-    func increment()
-    {
-        if let value = stack.popLast()
-        {
-            let result = value+1
-            stack.append(result)
-        }
-    }
-
-    /**
-    take the square root of the top stack item
-    */
-    func squareRoot()
-    {
-        if let top = stack.popLast()
-        {
-            let result = sqrt(top)
-            stack.append(result)
-        }
-    }
-    
-    /**
-    square the top stack item
-    */
-    func square()
-    {
-        if let top = stack.popLast()
-        {
-            let result = pow(top, 2)
-            stack.append(result)
-        }
-    }
-    
-    /**
-    Put PI (π) on the stack
-    */
-    func pie()
-    {
-        stack.append(Float64.pi)
-    }
-    
-    /**
-    Put the speed of light in meters/second on the stack
-    */
-    func speedOfLight(){stack.append(299792458.0)}
-    
-    /**
-    Find the absolute value of the top stack item
-    */
-    func absTop()
-    {
-        if let top = stack.popLast()
-        {
-            let result = abs(top)
-            stack.append(result)
-        }
-    }
-
-    /**
-    Floor the top stack item
-    */
-    func floorTop()
-    {
-        if let top = stack.popLast()
-        {
-            let result = floor(top)
-            stack.append(result)
-        }
-    }
-
-    /**
-    Ceil the top stack item
-    */
-    func ceilTop()
-    {
-        if let top = stack.popLast()
-        {
-            let result = ceil(top)
-            stack.append(result)
-        }
-    }
-    
-    /**
-    Rotate the entire stack by taking the last stack item and put it in the front
-    Thus, [1, 2, 3] becomes [2, 3, 1]
-    */
-    func rotateLeft()
-    {
-        let first = stack.removeFirst()
-        stack.append(first)
-    }
-
-    /**
-    Rotate the entire stack by taking the top stack item and putting at the end.
-    Thus, [1, 2, 3] becomes [3, 1, 2]
-    */
-    func rotateRight()
-    {
-        if let last = stack.popLast()
-        {
-            stack.insert(last, at: 0)
-        }
-    }
+    // MARK: -Ternary operators
 
     /**
     Take the average of the entire stack and return that value as the sole value
@@ -533,7 +536,8 @@ class StackCalculator: NSObject
         let ans = running / Float64(max)
         stack.append(ans)
     }
-
+    
+    
     /**
     take the top three stack items and test if the third item is positive,
     returning the second item if it is or the first (top) item if it is not
