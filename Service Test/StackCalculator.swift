@@ -27,6 +27,11 @@ class StackCalculator: NSObject
     */
     var stack = [Float64]()
     
+    /**
+    Math memory, this contains all the named variables
+    */
+    var memory = [String:Float64]()
+    
     /* ****************************************************************** */
     // MARK: - Methods
     
@@ -75,15 +80,18 @@ class StackCalculator: NSObject
                     switch cmd
                     {
                         case "help": ans = help()
-                        case "=", "p", "P", "d":
-                            ans = ans + " " + self.printers(operation: cmd)
-                            ans = ans.trimmingCharacters(in: .whitespacesAndNewlines)
-                        case "++", "--", "<<", ">>", "^2", "√", "abs", "ceil", "floor", "π", "c":
+                        case "=", "Print", "dump":
+                            let text = self.printers(operation: cmd)
+                            if ans.count>0 {ans.append(contentsOf: " ")}
+                            ans.append(contentsOf: text)
+                        case "++", "--", "<<", ">>", "^2", "√", "abs", "ceil", "floor", "π", "SoL":
                             self.unary(operation: cmd)
                         case "+", "-", "*", "/", "%", "^", "<>", "<->", "max", "min":
                             self.binary(operation: cmd)
-                        case "?>", "avg":
+                        case "?>", "avg", "clear":
                             self.ternary(operation: cmd)
+                        case "A"..."Z", "a"..."z":
+                            self.memory(operation: cmd)
                         default:
                             print ("unknown command: \(cmd).")
                     }
@@ -95,6 +103,11 @@ class StackCalculator: NSObject
         return ans;
     }
     
+    func trim(text:String) -> String
+    {
+        return text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
     // MARK: - Operation Types
     
     func printers(operation:String) -> String
@@ -102,9 +115,9 @@ class StackCalculator: NSObject
         var ans = ""
         switch operation
         {
-            case "p", "=": ans = printTop()
-            case "P": ans = printTopFormated()
-            case "d": ans = dumpAll()
+            case "=": ans = printTop()
+            case "Print": ans = printTopFormated()
+            case "dump": ans = dumpAll()
             default:
                 ans = ""
                 print(stack)
@@ -131,7 +144,7 @@ class StackCalculator: NSObject
             case "^2": square()
             case "√": squareRoot()
             case "π": pie()
-            case "c": speedOfLight()
+            case "SoL": speedOfLight()
             case "abs": absTop()
             case "floor": floorTop()
             case "ceil": ceilTop()
@@ -178,10 +191,41 @@ class StackCalculator: NSObject
         {
             case "?>": if_positive()
             case "avg": average()
+            case "clear": clear()
             default: print (stack)
         }
     }
 
+    /**
+    Load/store memory operations. the operation is the name of the value to load
+    or store. Operation is determaned by case. Lower case will load (return) the
+    stored value (or 0.0 if no value has been previously stored) to the stack,
+    while upper case will write the current item on the top of the stack to
+    memory. Memory locations "a"..."z" are currently supported.
+    
+    Uppercase for writing was chosen as upper case may denote more of a warning
+    or seriousness because data could be lost.
+    
+    * Parameter operation: a-z or A-Z
+    */
+    func memory(operation:String)
+    {
+        switch operation
+        {
+            case "a"..."z":
+                stack.append(self.memory[operation.lowercased()] ?? 0.0)
+                print ("<-\(operation) from \(memory)")
+            case "A"..."Z":
+                if let top = stack.last
+                {
+                    self.memory[operation.lowercased()] = top
+                    print ("->\(operation) to \(memory)")
+                }
+            default:
+                print ("unknown memory operation")
+        }
+    }
+    
     // MARK: - Operations
     
     func help() -> String
@@ -218,10 +262,9 @@ class StackCalculator: NSObject
         {
             ans = String(format: "%f", last)
         }
-        print("printing ans of \(ans)")
         return ans
     }
-
+    
     /**
     peek at the top stack item and return it, formated, for printing. Formated
     by removing unneeded zeros and adding commas for each number group.
@@ -537,6 +580,13 @@ class StackCalculator: NSObject
         stack.append(ans)
     }
     
+    /**
+    Emtpy the stack
+    */
+    func clear()
+    {
+        stack.removeAll()
+    }
     
     /**
     take the top three stack items and test if the third item is positive,

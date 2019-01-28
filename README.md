@@ -10,6 +10,8 @@ Responds to `+ - * / % ^ ++ -- p = avg if>`:
 
 * `2 3 * p` will equal 6
 
+Operations inside are
+
 ### Markdown ###
 
 Requires a markdown converter to be located at `/usr/local/bin/markdown` or for the following defaults to be set `markdown.cmd` via the defaults command.

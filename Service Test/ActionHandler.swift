@@ -180,7 +180,7 @@ import AppKit
             self.calculator = StackCalculator()
         }
         let result:String = (calculator?.calculate(formula))!
-        let output = String("\(formula) = \(result)")
+        let output = String("\(formula) is \(result)")
         return ["text/plain":output, "text/html":""]
     }
     

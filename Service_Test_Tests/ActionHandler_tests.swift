@@ -49,9 +49,9 @@ class ActionHandler_tests: XCTestCase {
     func testRPN()
     {
         let handler:ActionHandler = ActionHandler()
-        let input = "5 4 3 2 1 + * - / p"
+        let input = "5 4 3 2 1 + * - / ="
         let result = handler.router(action: "rpn", source: input)
-        let expected = "5 4 3 2 1 + * - / p = -1.000000"
+        let expected = "5 4 3 2 1 + * - / = is -1.000000"
         XCTAssertEqual(result["text/plain"], expected)
     }
 
